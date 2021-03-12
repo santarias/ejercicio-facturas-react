@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 const Facturas = () => {
   const [facturas, setFacturas] = useState();
   const { DateTime } = require("luxon");
+  const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`);
 
   useEffect(() => {
-    (async () => {
-      const resp = await fetch(`${process.env.REACT_APP_API_URL}`);
-      const facturasJSON = await resp.json();
-      setFacturas(facturasJSON.filter(facturaJSON => facturaJSON.tipo === "ingreso"));
-    })();
-  }, []);
+    if (facturasAPI) {
+      setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
+    }
+  }, [facturasAPI]);
 
   const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
     if (fechaVencimiento > fechaHoy) {
