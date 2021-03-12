@@ -1,5 +1,7 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
+import Buscador from "./components/Buscador";
 import Facturas from "./components/Facturas";
+import Totales from "./components/Totales";
 
 function App() {
   return (
@@ -13,10 +15,7 @@ function App() {
         <main>
           <Row>
             <Col as="div" className="info-listado info-listado-top text-right">
-              <Form.Label>
-                Buscar
-              <FormControl type="text" className="form-control-sm" />
-              </Form.Label>
+              <Buscador />
             </Col>
           </Row>
           <Table striped bordered hover className="listado">
@@ -33,6 +32,7 @@ function App() {
               </tr>
             </thead>
             <Facturas />
+            <Totales />
           </Table>
         </main>
       </Container >
