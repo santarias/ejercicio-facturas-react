@@ -1,44 +1,11 @@
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
+import PropTypes from "prop-types";
+import { DateTime } from "luxon";
 
-const Facturas = () => {
-  const [facturas, setFacturas] = useState();
-  const { DateTime } = require("luxon");
-  const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`);
+const Facturas = (props) => {
+  const { DateTime, facturas, cantidadIVA, verificaVencimiento, compruebaVencimiento } = props;
 
-  useEffect(() => {
-    if (facturasAPI) {
-      setFacturas(facturasAPI.filter(facturaAPI => facturaAPI.tipo === "ingreso"));
-    }
-  }, [facturasAPI]);
-
-  const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
-    if (fechaVencimiento > fechaHoy) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  const compruebaVencimiento = (vencimiento) => {
-    const fechaHoy = DateTime.local();
-    const fechaVencimiento = DateTime.fromMillis(+vencimiento);
-    const difFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
-    const diasDif = Math.abs(Math.trunc(difFechas.days));
-    if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
-      return `${fechaVencimiento.toLocaleString()} (faltan ${diasDif} días)`;
-    } else {
-      return `${fechaVencimiento.toLocaleString()} (hace ${diasDif} días)`;
-    }
-  };
-
-  const total = {
-    bases: 0,
-    ivas: 0,
-    totales: 0
-  };
-
-  const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
   return (
     <tbody>
       { facturas ?
@@ -68,6 +35,14 @@ const Facturas = () => {
       }
     </tbody >
   );
+};
+
+Facturas.propTypes = {
+  DateTime: PropTypes.instanceOf(DateTime).isRequired,
+  facturas: PropTypes.array.isRequired,
+  cantidadIVA: PropTypes.func.isRequired,
+  verificaVencimiento: PropTypes.func.isRequired,
+  compruebaVencimiento: PropTypes.func.isRequired
 };
 
 export default Facturas;
