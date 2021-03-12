@@ -1,4 +1,5 @@
 import { Col, Container, Form, FormControl, Row, Table, ToastHeader } from "react-bootstrap";
+import Facturas from "./components/Facturas";
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
                 <th className="col-max">Vence</th>
               </tr>
             </thead>
+
+            <Facturas />
+
           </Table>
         </main>
       </Container >
