@@ -12,12 +12,20 @@ const Facturas = () => {
     })();
   }, []);
 
-  const compruebaVencimient = (vencimiento) => {
+  const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
+    if (fechaVencimiento > fechaHoy) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const compruebaVencimiento = (vencimiento) => {
     const fechaHoy = DateTime.local();
     const fechaVencimiento = DateTime.fromMillis(+vencimiento);
     const difFechas = fechaVencimiento.diff(fechaHoy, "days").toObject();
     const diasDif = Math.abs(Math.trunc(difFechas.days));
-    if (fechaVencimiento > fechaHoy) {
+    if (verificaVencimiento(fechaHoy, fechaVencimiento)) {
       return `${fechaVencimiento.toLocaleString()} (faltan ${diasDif} días)`;
     } else {
       return `${fechaVencimiento.toLocaleString()} (hace ${diasDif} días)`;
@@ -49,15 +57,16 @@ const Facturas = () => {
                 {(factura.base + cantidadIVA(factura.base, factura.tipoIva)).toFixed(2)}
               </span>€</td>
             <td className={`estado ${factura.abonada ? "table-success" : "table-danger"}`}>{factura.abonada ? "Abonada" : "Pendiente"}</td>
-            <td className="vencimiento">
-              {factura.abonada ? "-" : compruebaVencimient(factura.vencimiento)}
+            <td className=
+              {`vencimiento
+              ${(!verificaVencimiento(DateTime.local(), factura.vencimiento) && !factura.abonada) ? "table-danger" : "table-success"}
+              `}>
+              {factura.abonada ? "-" : compruebaVencimiento(factura.vencimiento)}
             </td>
           </tr>
         )) : <tr className="factura-dummy" />
       }
     </tbody >
-
-
   );
 };
 

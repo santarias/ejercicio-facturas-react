@@ -32,9 +32,7 @@ function App() {
                 <th className="col-max">Vence</th>
               </tr>
             </thead>
-
             <Facturas />
-
           </Table>
         </main>
       </Container >
