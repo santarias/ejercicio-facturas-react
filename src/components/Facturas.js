@@ -5,7 +5,7 @@ const Facturas = (props) => {
   const { facturas, cantidadIVA, verificaVencimiento, compruebaVencimiento } = props;
   return (
     <tbody>
-      { facturas ?
+      { facturas &&
         facturas.map((factura) =>
         (
           < tr key={factura.id} className="factura" >
@@ -29,7 +29,7 @@ const Facturas = (props) => {
               {factura.abonada ? "-" : compruebaVencimiento(factura.vencimiento)}
             </td>
           </tr>
-        )) : <tr className="factura-dummy" />
+        ))
       }
     </tbody >
   );
