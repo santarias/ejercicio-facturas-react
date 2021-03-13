@@ -7,7 +7,8 @@ import useFetch from "./hooks/useFetch";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
-  const { datos: facturasAPI } = useFetch(`${process.env.REACT_APP_API_URL}`);
+  const [urlDatosApi, setUrlDatosApi] = useState(`${process.env.REACT_APP_API_URL}`);
+  const { datos: facturasAPI } = useFetch(urlDatosApi);
   const [totalBase, setTotalBase] = useState(0);
   const [totalIva, setTotalIva] = useState(0);
   const [totalTotal, setTotalTotal] = useState(0);
@@ -22,7 +23,11 @@ function App() {
     if (facturas.length > 0) {
       setTotalBase(facturas.map(factura => factura.base).reduce((acc, base) => acc + base));
       setTotalIva(facturas.map(factura => factura.base * (factura.tipoIva / 100)).reduce((acc, iva) => acc + iva));
-      setTotalTotal(facturas.map(factura => factura.base + factura.base * (factura.tipoIva / 100)).reduce((acc, total) => acc + total).toFixed(1));
+      setTotalTotal(Math.round(facturas.map(factura => factura.base + factura.base * (factura.tipoIva / 100)).reduce((acc, total) => acc + total) * 100) / 100);
+    } else {
+      setTotalBase(0);
+      setTotalIva(0);
+      setTotalTotal(0);
     }
   }, [facturas]);
 
@@ -46,6 +51,13 @@ function App() {
       return `${fechaVencimiento.toLocaleString()} (hace ${diasDif} días)`;
     }
   };
+  const cambiarBusqueda = e => {
+    if (e.target.value) {
+      setUrlDatosApi(`${process.env.REACT_APP_API_URL}?numero=${e.target.value}`);
+    } else {
+      setUrlDatosApi(`${process.env.REACT_APP_API_URL}`);
+    }
+  };
 
   return (
     <>
@@ -58,7 +70,7 @@ function App() {
         <main>
           <Row>
             <Col as="div" className="info-listado info-listado-top text-right">
-              <Buscador />
+              <Buscador cambiarBusqueda={cambiarBusqueda} />
             </Col>
           </Row>
           <Table striped bordered hover className="listado">
@@ -75,7 +87,6 @@ function App() {
               </tr>
             </thead>
             <Facturas
-              DateTime={DateTime}
               facturas={facturas}
               cantidadIVA={cantidadIVA}
               verificaVencimiento={verificaVencimiento}

@@ -1,10 +1,11 @@
 import { Form } from "react-bootstrap";
 
 const Buscador = props => {
+  const { cambiarBusqueda } = props;
   return (
     <Form.Label>
       Buscar
-      <Form.Control type="text" className="form-control-sm" placeholder="Num de factura"></Form.Control>
+      <Form.Control type="text" className="form-control-sm" onChange={cambiarBusqueda}></Form.Control>
     </Form.Label>
   );
 };
