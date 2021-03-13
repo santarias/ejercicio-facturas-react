@@ -4,6 +4,7 @@ import Buscador from "./components/Buscador";
 import Facturas from "./components/Facturas";
 import Totales from "./components/Totales";
 import useFetch from "./hooks/useFetch";
+import { DateTime } from "luxon";
 
 function App() {
   const [facturas, setFacturas] = useState([]);
@@ -31,7 +32,6 @@ function App() {
     }
   }, [facturas]);
 
-  const { DateTime } = require("luxon");
   const cantidadIVA = (base, tipoIVA) => base * (tipoIVA / 100);
   const verificaVencimiento = (fechaHoy, fechaVencimiento) => {
     if (fechaVencimiento > fechaHoy) {
