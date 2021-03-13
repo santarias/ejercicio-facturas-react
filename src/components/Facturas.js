@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { DateTime } from "luxon";
 
 const Facturas = (props) => {
-  const { DateTime, facturas, cantidadIVA, verificaVencimiento, compruebaVencimiento } = props;
+  const { facturas, cantidadIVA, verificaVencimiento, compruebaVencimiento } = props;
   return (
     <tbody>
       { facturas ?
@@ -36,7 +36,6 @@ const Facturas = (props) => {
 };
 
 Facturas.propTypes = {
-  DateTime: PropTypes.instanceOf(DateTime).isRequired,
   facturas: PropTypes.array.isRequired,
   cantidadIVA: PropTypes.func.isRequired,
   verificaVencimiento: PropTypes.func.isRequired,
